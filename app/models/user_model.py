@@ -46,3 +46,7 @@ class User(Base):
         back_populates="user",
         uselist=False
     )
+    comments = relationship(
+    "Comment",
+    back_populates="user"
+)

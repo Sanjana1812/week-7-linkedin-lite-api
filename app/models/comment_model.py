@@ -1,20 +1,13 @@
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    ForeignKey,
-    DateTime,
-)
-
-from sqlalchemy.orm import relationship
 from datetime import datetime
+
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import relationship
 
 from app.database.connection import Base
 
 
-class Post(Base):
-
-    __tablename__ = "posts"
+class Comment(Base):
+    __tablename__ = "comments"
 
     id = Column(
         Integer,
@@ -24,7 +17,14 @@ class Post(Base):
 
     user_id = Column(
         Integer,
-        ForeignKey("users.id")
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    post_id = Column(
+        Integer,
+        ForeignKey("posts.id"),
+        nullable=False
     )
 
     content = Column(
@@ -44,10 +44,11 @@ class Post(Base):
     )
 
     user = relationship(
-        "User"
+        "User",
+        back_populates="comments"
     )
-    comments = relationship(
-    "Comment",
-    back_populates="post",
-    cascade="all, delete-orphan"
-)
+
+    post = relationship(
+        "Post",
+        back_populates="comments"
+    )
